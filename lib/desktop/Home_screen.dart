@@ -1,11 +1,19 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:travego_dashboard/core/domain/services/api.dart';
+import 'package:travego_dashboard/core/domain/services/api_imp.dart';
 import 'package:travego_dashboard/desktop/users/Users.dart';
 import 'package:travego_dashboard/desktop/countries.dart';
 import 'package:travego_dashboard/desktop/create_trip.dart';
 import 'package:travego_dashboard/desktop/home_show.dart';
 import 'package:travego_dashboard/desktop/hotellist.dart';
 import 'package:travego_dashboard/desktop/provider.dart';
+import 'package:travego_dashboard/feature/trip/data/repo/trip_repo.dart';
+import 'package:travego_dashboard/feature/trip/data/repo/trip_repo_impl.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/country_cubit/country_cubit.dart';
+import 'package:travego_dashboard/feature/trip/presentation/views/add_trip_view.dart';
 
 
 class HomePageScreen extends StatefulWidget {
@@ -264,6 +272,18 @@ Widget homepage(BuildContext context) {
                     context: context,
                     builder: (ctx) => const Addtrip(),
                     barrierDismissible: false);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.add_reaction),
+          title: const Text('Add New Trip by aya bq😎'),
+          onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  MultiBlocProvider(providers: [
+                    BlocProvider(
+                      create: (context) =>CountryCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
+                    )
+                  ], child: AddTripView())));
           },
         ),
        
