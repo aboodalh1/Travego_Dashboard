@@ -12,6 +12,7 @@ import 'package:travego_dashboard/desktop/hotellist.dart';
 import 'package:travego_dashboard/desktop/provider.dart';
 import 'package:travego_dashboard/feature/trip/data/repo/trip_repo.dart';
 import 'package:travego_dashboard/feature/trip/data/repo/trip_repo_impl.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/city_model/city_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/country_cubit/country_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/views/add_trip_view.dart';
 
@@ -282,8 +283,12 @@ Widget homepage(BuildContext context) {
                   MultiBlocProvider(providers: [
                     BlocProvider(
                       create: (context) =>CountryCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
-                    )
-                  ], child: AddTripView())));
+                    ),
+                    BlocProvider(
+                      create: (context) =>CityCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
+                    ),
+                  ],
+                      child: AddTripView())));
           },
         ),
        

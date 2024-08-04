@@ -27,8 +27,7 @@ class ApiServicesImp implements ApiServices {
   Future<void> setHeaders(bool hasToken) async {
 
     _headers = {
-      "Accept": "application/json",
-      "accept-timezone": DateTime.now().timeZoneName,
+      "accept": "*/*",
       "Authorization": hasToken ? "Bearer $token" : null,
     };
   }

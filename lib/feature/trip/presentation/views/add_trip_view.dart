@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:travego_dashboard/feature/trip/data/models/city_model.dart';
 import 'package:travego_dashboard/feature/trip/data/models/country_model.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/city_model/city_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/country_cubit/country_cubit.dart';
 
 class AddTripView extends StatefulWidget {
@@ -21,7 +23,7 @@ class _AddTripViewState extends State<AddTripView> {
   DateTime? tripStartDate;
   DateTime? tripEndDate;
   CountryModel? selectedCountry;
-  List<int> selectedCities = [];
+  List<CityModel> selectedCities = [];
   List<int> selectedHotels = [];
   int minPassengers = 0;
   int maxPassengers = 0;
@@ -30,7 +32,8 @@ class _AddTripViewState extends State<AddTripView> {
   bool isPrivate = true;
   String? selectedFlightCompany;
 
-  late CountryCubit manager;
+  late CountryCubit countryManager;
+  late CityCubit cityManager;
 
   void onTripNameChange(String value) {
     setState(() {});
@@ -86,10 +89,14 @@ class _AddTripViewState extends State<AddTripView> {
     });
   }
 
-  void onCityChange(int value) {
+  void onCityChange(CityModel value) {
+
     setState(() {
       if (!selectedCities.contains(value)) {
         selectedCities.add(value);
+      }
+      for(var e in selectedCities){
+        print(e.cityName);
       }
     });
   }
@@ -239,13 +246,15 @@ class _AddTripViewState extends State<AddTripView> {
   }
   @override
   void initState() {
-    manager=context.read<CountryCubit>();
+    countryManager=context.read<CountryCubit>();
+    cityManager=context.read<CityCubit>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    manager.fetchAllCountries();
+    countryManager.fetchAllCountries();
+    cityManager.fetchAllCities();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -304,7 +313,7 @@ class _AddTripViewState extends State<AddTripView> {
               child: Text(selectedCountry!=null?'${selectedCountry!.name}' : 'Select Country'),
               onSelected: onCountryChange,
               itemBuilder: (BuildContext context) {
-                return manager.countries.map(( choice) {
+                return countryManager.countries.map(( choice) {
                   return PopupMenuItem<CountryModel>(
                     value: choice,
                     child: Text(choice.name),
@@ -312,17 +321,16 @@ class _AddTripViewState extends State<AddTripView> {
                 }).toList();
               },
             ),
-            PopupMenuButton<int>(
+            PopupMenuButton<CityModel>(
               child: const Text('Select Cities'),
               onSelected: onCityChange,
               itemBuilder: (BuildContext context) {
-                return List<PopupMenuEntry<int>>.generate(
-                  10,
-                      (int index) => PopupMenuItem<int>(
-                    value: index,
-                    child: Text('City $index'),
-                  ),
-                );
+      return cityManager.countries.map(( choice) {
+      return PopupMenuItem<CityModel>(
+      value: choice,
+      child: Text("${choice.cityName},${choice.countryName}"),
+      );
+      }).toList();
               },
             ),
             PopupMenuButton<int>(
