@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travego_dashboard/feature/trip/data/models/city_model.dart';
 import 'package:travego_dashboard/feature/trip/data/models/country_model.dart';
+import 'package:travego_dashboard/feature/trip/data/models/hotel_model.dart';
+import 'package:travego_dashboard/feature/trip/data/models/services_model.dart';
+import 'package:travego_dashboard/feature/trip/data/models/trip_model.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/city_model/city_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/country_cubit/country_cubit.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/create_trip_cubit.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/hotel_cubit/hotel_cubit.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/services_cubit/hotel_cubit.dart';
 
 class AddTripView extends StatefulWidget {
   const AddTripView({super.key});
@@ -15,7 +21,8 @@ class AddTripView extends StatefulWidget {
 
 class _AddTripViewState extends State<AddTripView> {
   final TextEditingController tripNameController = TextEditingController();
-  final TextEditingController tripDescriptionController = TextEditingController();
+  final TextEditingController tripDescriptionController =
+      TextEditingController();
   final TextEditingController hotelPriceController = TextEditingController();
   final TextEditingController flightPriceController = TextEditingController();
   final TextEditingController servicesPriceController = TextEditingController();
@@ -23,8 +30,9 @@ class _AddTripViewState extends State<AddTripView> {
   DateTime? tripStartDate;
   DateTime? tripEndDate;
   CountryModel? selectedCountry;
-  List<CityModel> selectedCities = [];
-  List<int> selectedHotels = [];
+  Set<CityModel> selectedCities = {};
+  Set<HotelModel> selectedHotels = {};
+  Set<ServiceModel> selectedServices = {};
   int minPassengers = 0;
   int maxPassengers = 0;
   String? tripCategory;
@@ -34,6 +42,8 @@ class _AddTripViewState extends State<AddTripView> {
 
   late CountryCubit countryManager;
   late CityCubit cityManager;
+  late HotelCubit hotelManager;
+  late ServicesCubit servicesManager;
 
   void onTripNameChange(String value) {
     setState(() {});
@@ -90,21 +100,27 @@ class _AddTripViewState extends State<AddTripView> {
   }
 
   void onCityChange(CityModel value) {
-
     setState(() {
       if (!selectedCities.contains(value)) {
         selectedCities.add(value);
       }
-      for(var e in selectedCities){
+      for (var e in selectedCities) {
         print(e.cityName);
       }
     });
   }
 
-  void onHotelChange(int value) {
+  void onHotelChange(HotelModel value) {
     setState(() {
       if (!selectedHotels.contains(value)) {
         selectedHotels.add(value);
+      }
+    });
+  }
+  void onServiceChange(ServiceModel value) {
+    setState(() {
+      if (!selectedServices.contains(value)) {
+        selectedServices.add(value);
       }
     });
   }
@@ -191,17 +207,20 @@ class _AddTripViewState extends State<AddTripView> {
       return;
     }
 
-    if (hotelPriceController.text.isEmpty || double.tryParse(hotelPriceController.text) == null) {
+    if (hotelPriceController.text.isEmpty ||
+        double.tryParse(hotelPriceController.text) == null) {
       showAlert('Valid Hotel Price is required');
       return;
     }
 
-    if (flightPriceController.text.isEmpty || double.tryParse(flightPriceController.text) == null) {
+    if (flightPriceController.text.isEmpty ||
+        double.tryParse(flightPriceController.text) == null) {
       showAlert('Valid Flight Price is required');
       return;
     }
 
-    if (servicesPriceController.text.isEmpty || double.tryParse(servicesPriceController.text) == null) {
+    if (servicesPriceController.text.isEmpty ||
+        double.tryParse(servicesPriceController.text) == null) {
       showAlert('Valid Services Price is required');
       return;
     }
@@ -212,6 +231,28 @@ class _AddTripViewState extends State<AddTripView> {
     }
 
     // Handle form submission
+    final trip= TripModel(
+        tripName: tripNameController.text,
+        tripDescription: tripDescriptionController.text,
+        tripCategory: tripCategory!,
+        tripStartDate: tripStartDate!,
+        tripEndDate: tripEndDate!,
+        country: selectedCountry!.id,
+        cities: selectedCities.map((e)=>e.id).toList(),
+        hotels: selectedHotels.map((e)=>e.id).toList(),
+        flightCompany: selectedFlightCompany!,
+        minPassengers: minPassengers,
+        maxPassengers: maxPassengers,
+        status: tripStatus!,
+        tripServices:selectedServices.map((e)=>e.name).toList(),
+        hotelPrice: double.parse(hotelPriceController.text),
+        flightPrice: double.parse(flightPriceController.text),
+        servicesPrice: double.parse(servicesPriceController.text),
+        isPrivate: isPrivate);
+
+
+    // print(trip.toJson());
+    context.read<TripCubit>().sendTrip(trip);
     print('Form submitted');
   }
 
@@ -244,18 +285,22 @@ class _AddTripViewState extends State<AddTripView> {
     servicesPriceController.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
-    countryManager=context.read<CountryCubit>();
-    cityManager=context.read<CityCubit>();
+    countryManager = context.read<CountryCubit>();
+    cityManager = context.read<CityCubit>();
+    hotelManager = context.read<HotelCubit>();
+    servicesManager=context.read<ServicesCubit>();
+    countryManager.fetchAllCountries();
+    cityManager.fetchAllCities();
+    hotelManager.fetchAllHotels();
+    servicesManager.fetchAllServices();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    countryManager.fetchAllCountries();
-    cityManager.fetchAllCities();
-
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -271,11 +316,23 @@ class _AddTripViewState extends State<AddTripView> {
               decoration: const InputDecoration(labelText: 'Trip Description'),
               onChanged: onTripDescriptionChange,
             ),
+
             PopupMenuButton<String>(
               child: Text(selectedFlightCompany ?? 'Select Flight Company'),
               onSelected: onFlightCompanyChange,
               itemBuilder: (BuildContext context) {
-                return ['Company1', 'Company2', 'Company3'].map((String choice) {
+                return ['Qatar_Airways',
+                'Fly_Emirates',
+                'Saudi_Flight',
+                'American_Airlines_Group',
+                'China_Eastern_Airlines',
+                'Ryanair_Holdings',
+                'Delta_Air_Lines',
+                'China_Southern_Airlines',
+                'Turkish_Airlines',
+                'United_Airlines'
+                ]
+                    .map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
@@ -310,10 +367,12 @@ class _AddTripViewState extends State<AddTripView> {
               ],
             ),
             PopupMenuButton<CountryModel>(
-              child: Text(selectedCountry!=null?'${selectedCountry!.name}' : 'Select Country'),
+              child: Text(selectedCountry != null
+                  ? '${selectedCountry!.name}'
+                  : 'Select Country'),
               onSelected: onCountryChange,
               itemBuilder: (BuildContext context) {
-                return countryManager.countries.map(( choice) {
+                return countryManager.countries.map((choice) {
                   return PopupMenuItem<CountryModel>(
                     value: choice,
                     child: Text(choice.name),
@@ -325,25 +384,36 @@ class _AddTripViewState extends State<AddTripView> {
               child: const Text('Select Cities'),
               onSelected: onCityChange,
               itemBuilder: (BuildContext context) {
-      return cityManager.countries.map(( choice) {
-      return PopupMenuItem<CityModel>(
-      value: choice,
-      child: Text("${choice.cityName},${choice.countryName}"),
-      );
-      }).toList();
+                return cityManager.countries.map((choice) {
+                  return PopupMenuItem<CityModel>(
+                    value: choice,
+                    child: Text("${choice.cityName},${choice.countryName}"),
+                  );
+                }).toList();
               },
             ),
-            PopupMenuButton<int>(
+            PopupMenuButton<HotelModel>(
               child: const Text('Select Hotels'),
               onSelected: onHotelChange,
               itemBuilder: (BuildContext context) {
-                return List<PopupMenuEntry<int>>.generate(
-                  10,
-                      (int index) => PopupMenuItem<int>(
-                    value: index,
-                    child: Text('Hotel $index'),
-                  ),
-                );
+                return hotelManager.hotels.map((choice) {
+                  return PopupMenuItem<HotelModel>(
+                    value: choice,
+                    child: Text(choice.hotelName),
+                  );
+                }).toList();
+              },
+            ),
+            PopupMenuButton<ServiceModel>(
+              child: const Text('Select Services'),
+              onSelected: onServiceChange,
+              itemBuilder: (BuildContext context) {
+                return servicesManager.hotels.map((choice) {
+                  return PopupMenuItem<ServiceModel>(
+                    value: choice,
+                    child: Text(choice.name),
+                  );
+                }).toList();
               },
             ),
             Row(
@@ -388,7 +458,12 @@ class _AddTripViewState extends State<AddTripView> {
               hint: const Text('Select Trip Category'),
               value: tripCategory,
               onChanged: onTripCategoryChange,
-              items: <String>['Category1', 'Category2', 'Category3']
+              items: <String>['Adventure_Travel',
+                'Beach',
+                'Cultural',
+                'Ecotourism',
+                'Family_Travel'
+                ]
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -400,7 +475,12 @@ class _AddTripViewState extends State<AddTripView> {
               hint: const Text('Select Status'),
               value: tripStatus,
               onChanged: onTripStatusChange,
-              items: <String>['Status1', 'Status2', 'Status3']
+              items: <String>['NOT_STARTED',
+                'Available',
+                'Completed',
+                'InProgress',
+                'Finished'
+                ]
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -445,3 +525,4 @@ class _AddTripViewState extends State<AddTripView> {
     );
   }
 }
+

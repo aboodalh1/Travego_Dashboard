@@ -14,7 +14,11 @@ import 'package:travego_dashboard/feature/trip/data/repo/trip_repo.dart';
 import 'package:travego_dashboard/feature/trip/data/repo/trip_repo_impl.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/city_model/city_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/country_cubit/country_cubit.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/create_trip_cubit.dart';
+import 'package:travego_dashboard/feature/trip/presentation/manager/hotel_cubit/hotel_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/views/add_trip_view.dart';
+
+import '../feature/trip/presentation/manager/services_cubit/hotel_cubit.dart';
 
 
 class HomePageScreen extends StatefulWidget {
@@ -286,6 +290,15 @@ Widget homepage(BuildContext context) {
                     ),
                     BlocProvider(
                       create: (context) =>CityCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
+                    ),
+                    BlocProvider(
+                      create: (context) =>HotelCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
+                    ),
+                    BlocProvider(
+                      create: (context) =>ServicesCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
+                    ),
+                  BlocProvider(
+                      create: (context) =>TripCubit(TripRepoImpl(api: ApiServicesImp(Dio())))
                     ),
                   ],
                       child: AddTripView())));
