@@ -1,11 +1,6 @@
-
-
-import 'package:travego_dashboard/feature/trip/data/models/hotel_model.dart';
-
 import 'package:equatable/equatable.dart';
 
-abstract class TripState extends Equatable{
-
+abstract class TripState extends Equatable {
   @override
   List<Object?> get props => [];
 }
@@ -26,7 +21,6 @@ class TripSuccess extends TripState {
 // }
 }
 
-
 class TripFailure extends TripState {
   final String errorMessage;
   TripFailure(this.errorMessage);
@@ -35,7 +29,4 @@ class TripFailure extends TripState {
   static TripFailure fromJson(Map<String, dynamic> response) {
     return TripFailure(response['message'] ?? 'Unknown error');
   }
-
-
-
 }

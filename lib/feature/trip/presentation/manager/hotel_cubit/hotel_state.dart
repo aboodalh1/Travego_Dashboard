@@ -1,13 +1,8 @@
-
-
 import 'package:travego_dashboard/feature/trip/data/models/hotel_model.dart';
 
-import '../../../data/models/city_model.dart';
-import '../../../data/models/country_model.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class HotelState extends Equatable{
-
+abstract class HotelState extends Equatable {
   @override
   List<Object?> get props => [];
 }
@@ -23,13 +18,10 @@ class HotelSuccess extends HotelState {
   @override
   List<Object?> get props => [citiesModels];
   static HotelSuccess fromJson(List<dynamic> response) {
-    final cities = (response )
-        .map((e) => HotelModel.fromJson(e))
-        .toList();
+    final cities = (response).map((e) => HotelModel.fromJson(e)).toList();
     return HotelSuccess(cities);
   }
 }
-
 
 class HotelFailure extends HotelState {
   final String errorMessage;
@@ -39,7 +31,4 @@ class HotelFailure extends HotelState {
   static HotelFailure fromJson(Map<String, dynamic> response) {
     return HotelFailure(response['message'] ?? 'Unknown error');
   }
-
-
-
 }

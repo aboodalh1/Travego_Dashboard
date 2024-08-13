@@ -1,11 +1,7 @@
-
-
 import '../../../data/models/city_model.dart';
-import '../../../data/models/country_model.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class CityState extends Equatable{
-
+abstract class CityState extends Equatable {
   @override
   List<Object?> get props => [];
 }
@@ -21,13 +17,10 @@ class CitySuccess extends CityState {
   @override
   List<Object?> get props => [citiesModels];
   static CitySuccess fromJson(List<dynamic> response) {
-    final cities = (response )
-        .map((e) => CityModel.fromJson(e))
-        .toList();
+    final cities = (response).map((e) => CityModel.fromJson(e)).toList();
     return CitySuccess(cities);
   }
 }
-
 
 class CityFailure extends CityState {
   final String errorMessage;
@@ -37,7 +30,4 @@ class CityFailure extends CityState {
   static CityFailure fromJson(Map<String, dynamic> response) {
     return CityFailure(response['message'] ?? 'Unknown error');
   }
-
-
-
 }

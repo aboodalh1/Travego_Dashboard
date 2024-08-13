@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:travego_dashboard/core/domain/services/api.dart';
@@ -14,12 +12,12 @@ import '../../../../core/utils/config.dart';
 import '../../presentation/manager/services_cubit/services_state.dart';
 import '../models/trip_model.dart';
 
-class TripRepoImpl extends TripRepo{
+class TripRepoImpl extends TripRepo {
   final ApiServices api;
 
   TripRepoImpl({required this.api});
   @override
-  Future<Either<Failure, CountrySuccess>> getCountries()async {
+  Future<Either<Failure, CountrySuccess>> getCountries() async {
     try {
       var response = await api.get(Confg.allCountriesUrl, hasToken: true);
       print(response);
@@ -33,7 +31,7 @@ class TripRepoImpl extends TripRepo{
   }
 
   @override
-  Future<Either<Failure, CitySuccess>> getCities() async{
+  Future<Either<Failure, CitySuccess>> getCities() async {
     print("from city");
     try {
       var response = await api.get(Confg.allCitiesUrl, hasToken: true);
@@ -50,7 +48,7 @@ class TripRepoImpl extends TripRepo{
   }
 
   @override
-  Future<Either<Failure, HotelSuccess>> getHotels()async {
+  Future<Either<Failure, HotelSuccess>> getHotels() async {
     try {
       var response = await api.get(Confg.allHotelsUrl, hasToken: true);
       print("hotellllll : $response");
@@ -66,7 +64,7 @@ class TripRepoImpl extends TripRepo{
   }
 
   @override
-  Future<Either<Failure, ServicesSuccess>> getServices()async {
+  Future<Either<Failure, ServicesSuccess>> getServices() async {
     try {
       var response = await api.get(Confg.allServicesUrl, hasToken: true);
       print("servixxxcccccc : $response");
@@ -82,10 +80,10 @@ class TripRepoImpl extends TripRepo{
   }
 
   @override
-  Future<Either<Failure, TripSuccess>> posTrip(TripModel trip) async{
+  Future<Either<Failure, TripSuccess>> posTrip(TripModel trip) async {
     try {
-      var response = await api.post(Confg.createTripUrl, hasToken: true,
-      body: trip.toJson());
+      var response = await api.post(Confg.createTripUrl,
+          hasToken: true, body: trip.toJson());
       print("servixxxcccccc : $response");
       return right(TripSuccess(response['message']));
     } catch (e) {
@@ -97,5 +95,4 @@ class TripRepoImpl extends TripRepo{
       return left(ServiecesFailure(e.toString()));
     }
   }
-
 }
