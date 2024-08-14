@@ -6,6 +6,7 @@ import 'package:travego_dashboard/feature/desktop_feature/data/repos/desktop_rep
 import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/hotel_deatails.dart';
 import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/hotel_grid_card.dart';
 import 'package:travego_dashboard/feature/desktop_feature/presentation/manager/all_hotels_cubit/all_hotels_cubit.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/manager/hotel_details_cubit/hotel_details_cubit_cubit.dart';
 
 class HotelsGridView extends StatelessWidget {
   const HotelsGridView({
@@ -33,6 +34,9 @@ class HotelsGridView extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
+                    BlocProvider.of<HotelDetailsCubitCubit>(context)
+                        .fetchHotelDetailsFun(
+                            id: state.allHotelsModel.body![index].hotelId!);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

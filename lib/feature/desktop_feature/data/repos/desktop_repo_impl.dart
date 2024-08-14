@@ -4,6 +4,7 @@ import 'package:travego_dashboard/core/domain/services/api.dart';
 import 'package:travego_dashboard/core/errors/failure.dart';
 import 'package:travego_dashboard/core/utils/config.dart';
 import 'package:travego_dashboard/feature/desktop_feature/data/models/all_hotels_model/all_hotels_model.dart';
+import 'package:travego_dashboard/feature/desktop_feature/data/models/hotel_details_model/hotel_details_model.dart';
 import 'package:travego_dashboard/feature/desktop_feature/data/models/up_coming_model/up_coming_model.dart';
 import 'package:travego_dashboard/feature/desktop_feature/data/repos/desktop_repo.dart';
 
@@ -41,6 +42,28 @@ class DesktopRepoImpl implements DesktopRepo {
       print(" $response");
       AllHotelsModel allHotelsModel = AllHotelsModel.fromJson(response);
       return right(allHotelsModel);
+    } catch (e) {
+      print("faaaaaaaaaaaaaaleeeeeeeeeeeee");
+      print(e.toString());
+      if (e is DioException) {
+        return left(ServiecesFailure.fromDioError(e));
+      }
+      return left(ServiecesFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, HotelDetailsModel>> getHotelDetails(
+      {required int id}) async {
+    try {
+      var response = await api.get(
+        'v1/hotel_details/$id',
+        hasToken: true,
+      );
+      print(" $response");
+      HotelDetailsModel hotelDetailsModel =
+          HotelDetailsModel.fromJson(response);
+      return right(hotelDetailsModel);
     } catch (e) {
       print("faaaaaaaaaaaaaaleeeeeeeeeeeee");
       print(e.toString());
