@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/countries.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/countries.dart';
 
 class MenuItems extends StatelessWidget {
   const MenuItems({super.key});

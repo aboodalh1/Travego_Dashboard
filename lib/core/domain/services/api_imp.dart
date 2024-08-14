@@ -7,8 +7,6 @@ import '../../../shared/constant/constant.dart';
 import '../../utils/config.dart';
 import 'api.dart';
 
-
-
 class ApiServicesImp implements ApiServices {
   final Dio _dio;
   late Map<String, dynamic> _headers;
@@ -25,7 +23,7 @@ class ApiServicesImp implements ApiServices {
   }
 
   Future<void> setHeaders(bool hasToken) async {
-
+    print(token);
     _headers = {
       "accept": "*/*",
       "Authorization": hasToken ? "Bearer $token" : null,
@@ -89,8 +87,6 @@ class ApiServicesImp implements ApiServices {
       rethrow;
     }
   }
-
-
 
   dynamic _handleResponseAsJson(Response response) {
     final responseAsJson = response.data.toString().isEmpty

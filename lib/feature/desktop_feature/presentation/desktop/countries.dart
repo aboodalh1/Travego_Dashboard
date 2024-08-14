@@ -1,7 +1,5 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/addCountry.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/addCountry.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CountryGridScreen extends StatefulWidget {
@@ -13,7 +11,7 @@ class CountryGridScreen extends StatefulWidget {
 
 class _CountryGridScreenState extends State<CountryGridScreen> {
   List<Country> countries = [
-      Country(
+    Country(
       name: "France",
       imageUrl: "assets/images/download.jpeg",
       location: "Europe",
@@ -128,21 +126,21 @@ class _CountryGridScreenState extends State<CountryGridScreen> {
         title: const Text('Tourist Countries'),
         actions: [
           IconButton(
-          icon: const Icon(Icons.add_home),
+            icon: const Icon(Icons.add_home),
             tooltip: 'Add New Country',
             onPressed: () {
-               showDialog(
-                    context: context,
-                    builder: (ctx) => const AddCountry(),
-                    barrierDismissible: false);
+              showDialog(
+                  context: context,
+                  builder: (ctx) => const AddCountry(),
+                  barrierDismissible: false);
             },
           ),
         ],
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5, 
-          childAspectRatio: 1, 
+          crossAxisCount: 5,
+          childAspectRatio: 1,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
         ),
@@ -210,77 +208,73 @@ class CountryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showCities(context, country.cities),
       child: Card(
-       elevation: 2,
-       // color: Colors.amber,
+        elevation: 2,
+        // color: Colors.amber,
         margin: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-             child: ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft:Radius.circular(8), topRight: Radius.circular(8)),
-              child:
-            Image.network(
-              country.imageUrl,
-              fit: BoxFit.cover,
-                width: double.infinity,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                child: Image.network(
+                  country.imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+              ),
             ),
-             ),
-             ),
             const SizedBox(height: 2),
             Padding(
               padding: const EdgeInsets.all(4),
-              child:Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    country.name,
-                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(country.location,
-                  style: const TextStyle(color: Colors.grey, fontSize: 15),
-                  ),
-                ]
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  country.name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
                 ),
+                const SizedBox(width: 5),
+                Text(
+                  country.location,
+                  style: const TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ]),
             ),
-                  const SizedBox(height: 3),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'View Cities',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 14
-                          ),
-                      ),
-                      Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            iconSize: 15,
-                            icon: const Icon(Icons.edit),
-                            onPressed: onEdit,
-                          ),
-                          IconButton(
-                            iconSize: 15,
-                            icon: const Icon(Icons.delete),
-                            onPressed: onDelete,
-                          ),
-                          IconButton(
-                            iconSize: 15,
-                            icon: const Icon(Icons.location_on),
-                            onPressed: () => _openGoogleMaps(country.googleMapsUrl),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            const SizedBox(height: 3),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'View Cities',
+                  style: TextStyle(color: Colors.blue, fontSize: 14),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      iconSize: 15,
+                      icon: const Icon(Icons.edit),
+                      onPressed: onEdit,
+                    ),
+                    IconButton(
+                      iconSize: 15,
+                      icon: const Icon(Icons.delete),
+                      onPressed: onDelete,
+                    ),
+                    IconButton(
+                      iconSize: 15,
+                      icon: const Icon(Icons.location_on),
+                      onPressed: () => _openGoogleMaps(country.googleMapsUrl),
+                    ),
+                  ],
+                ),
+              ],
             ),
-  
+          ],
+        ),
+      ),
     );
   }
 }
@@ -307,8 +301,10 @@ class _CountryEditDialogState extends State<CountryEditDialog> {
     _nameController = TextEditingController(text: widget.country.name);
     _imageUrlController = TextEditingController(text: widget.country.imageUrl);
     _locationController = TextEditingController(text: widget.country.location);
-    _googleMapsUrlController = TextEditingController(text: widget.country.googleMapsUrl);
-    _citiesController = TextEditingController(text: widget.country.cities.join(", "));
+    _googleMapsUrlController =
+        TextEditingController(text: widget.country.googleMapsUrl);
+    _citiesController =
+        TextEditingController(text: widget.country.cities.join(", "));
   }
 
   @override
@@ -346,7 +342,8 @@ class _CountryEditDialogState extends State<CountryEditDialog> {
             ),
             TextField(
               controller: _citiesController,
-              decoration: const InputDecoration(labelText: 'Cities (comma separated)'),
+              decoration:
+                  const InputDecoration(labelText: 'Cities (comma separated)'),
             ),
           ],
         ),
@@ -365,7 +362,10 @@ class _CountryEditDialogState extends State<CountryEditDialog> {
               name: _nameController.text,
               imageUrl: _imageUrlController.text,
               location: _locationController.text,
-              cities: _citiesController.text.split(',').map((city) => city.trim()).toList(),
+              cities: _citiesController.text
+                  .split(',')
+                  .map((city) => city.trim())
+                  .toList(),
               googleMapsUrl: _googleMapsUrlController.text,
             );
             Navigator.of(context).pop(editedCountry);
@@ -391,8 +391,3 @@ class Country {
     required this.googleMapsUrl,
   });
 }
-
-
-
-
- 

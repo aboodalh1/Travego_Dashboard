@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/placemodel.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/placemodel.dart';
 
 class PlaceDetails extends StatelessWidget {
-   final Place? place;
+  final Place? place;
 
   const PlaceDetails({super.key, required this.place});
 

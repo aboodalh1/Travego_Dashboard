@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/placemodel.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/placemodel.dart';
 
 class AddEditPlace extends StatefulWidget {
   final Place? place;
@@ -27,13 +27,19 @@ class _AddEditPlaceState extends State<AddEditPlace> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.place?.name ?? '');
-    _descriptionController = TextEditingController(text: widget.place?.description ?? '');
-    _countryController = TextEditingController(text: widget.place?.country ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.place?.description ?? '');
+    _countryController =
+        TextEditingController(text: widget.place?.country ?? '');
     _cityController = TextEditingController(text: widget.place?.city ?? '');
-    _openingTimeController = TextEditingController(text: widget.place?.openingTime ?? '');
-    _closingTimeController = TextEditingController(text: widget.place?.closingTime ?? '');
-    _latitudeController = TextEditingController(text: widget.place?.location.latitude.toString() ?? '');
-    _longitudeController = TextEditingController(text: widget.place?.location.longitude.toString() ?? '');
+    _openingTimeController =
+        TextEditingController(text: widget.place?.openingTime ?? '');
+    _closingTimeController =
+        TextEditingController(text: widget.place?.closingTime ?? '');
+    _latitudeController = TextEditingController(
+        text: widget.place?.location.latitude.toString() ?? '');
+    _longitudeController = TextEditingController(
+        text: widget.place?.location.longitude.toString() ?? '');
     _imageController = TextEditingController(text: widget.place?.image ?? '');
   }
 
@@ -158,7 +164,8 @@ class _AddEditPlaceState extends State<AddEditPlace> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     final place = Place(
-                      id: widget.place?.id ?? DateTime.now().millisecondsSinceEpoch,
+                      id: widget.place?.id ??
+                          DateTime.now().millisecondsSinceEpoch,
                       name: _nameController.text,
                       description: _descriptionController.text,
                       country: _countryController.text,
@@ -166,7 +173,8 @@ class _AddEditPlaceState extends State<AddEditPlace> {
                       openingTime: _openingTimeController.text,
                       closingTime: _closingTimeController.text,
                       location: Location(
-                        id: widget.place?.location.id ?? DateTime.now().millisecondsSinceEpoch,
+                        id: widget.place?.location.id ??
+                            DateTime.now().millisecondsSinceEpoch,
                         latitude: double.parse(_latitudeController.text),
                         longitude: double.parse(_longitudeController.text),
                       ),
@@ -176,7 +184,8 @@ class _AddEditPlaceState extends State<AddEditPlace> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text(widget.place == null ? 'Add Place' : 'Save Changes'),
+                child:
+                    Text(widget.place == null ? 'Add Place' : 'Save Changes'),
               ),
             ],
           ),

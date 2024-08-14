@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/widgets/hotel_card.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/hotel_card.dart';
 
 class HotelCards extends StatelessWidget {
   const HotelCards({super.key});

@@ -5,7 +5,7 @@ class BookingCard extends StatelessWidget {
   final int nights;
   final String location;
   final String date;
-  final int adjustments;
+  final String adjustments;
   final double price;
   final String imagePath;
 
@@ -56,9 +56,9 @@ class BookingCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Date: $date'),
-                      Text('Adjustments: $adjustments'),
                     ],
                   ),
+                  Text('Category: $adjustments'),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

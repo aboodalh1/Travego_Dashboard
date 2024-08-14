@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/places.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/places.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key});

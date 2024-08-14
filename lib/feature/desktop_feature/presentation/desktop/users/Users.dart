@@ -4,16 +4,19 @@ import 'package:provider/provider.dart';
 import 'package:travego_dashboard/Dio/dioHelper.dart';
 import 'package:travego_dashboard/shared/constant/constant.dart';
 
-import '../../shared/component/component.dart';
+import '../../../../../shared/component/component.dart';
 import 'SureAlertDialog.dart';
 import 'add_user/add_user_screen.dart';
 
-
-
-
 class UserProvider with ChangeNotifier {
-
-  void addUser({required first_name,required last_name,required username,required phone_number,required email,required password,required confirmation_password}) {
+  void addUser(
+      {required first_name,
+      required last_name,
+      required username,
+      required phone_number,
+      required email,
+      required password,
+      required confirmation_password}) {
     DioHelper.postData(url: 'Auth/Manager/Create_CLient', data: {
       "first_name": first_name,
       "last_name": last_name,
@@ -25,25 +28,19 @@ class UserProvider with ChangeNotifier {
     }).then((value) {
       getClient();
       showToast(text: value.data['message'], state: ToastStates.SUCCESS);
-
     }).catchError((e) {
       showToast(text: e.response?.data['message'], state: ToastStates.ERROR);
     });
   }
 
-  void updateUser(String id) {
+  void updateUser(String id) {}
 
-    }
-
-  void deleteUser(context,{required num id,required String email}) {
-    showDialog(context: context, builder: (context)=>Sure_Alert_Dialog(id:id,email:email));
-
+  void deleteUser(context, {required num id, required String email}) {
+    showDialog(
+        context: context,
+        builder: (context) => Sure_Alert_Dialog(id: id, email: email));
   }
-
-
-
 }
-
 
 class UserListPage extends StatelessWidget {
   const UserListPage({super.key});
@@ -71,9 +68,16 @@ class UserListPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: Text('User Name', style: TextStyle(fontWeight: FontWeight.bold))),
-                Expanded(child: Text('User Email', style: TextStyle(fontWeight: FontWeight.bold))),
-                Expanded(child: Center(child: Text('Is Active', style: TextStyle(fontWeight: FontWeight.bold)))),
+                Expanded(
+                    child: Text('User Name',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Expanded(
+                    child: Text('User Email',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Expanded(
+                    child: Center(
+                        child: Text('Is Active',
+                            style: TextStyle(fontWeight: FontWeight.bold)))),
               ],
             ),
           ),
@@ -83,23 +87,23 @@ class UserListPage extends StatelessWidget {
                 return ListView.builder(
                   itemCount: allClientModel!.body!.content!.length,
                   itemBuilder: (context, index) {
-
                     return ListTile(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(child: Text("${allClientModel!.body!.content![index].firstName} ${allClientModel!.body!.content![index].lastName}" )),
-                          Expanded(child: Text(allClientModel!.body!.content![index].email!)),
-
+                          Expanded(
+                              child: Text(
+                                  "${allClientModel!.body!.content![index].firstName} ${allClientModel!.body!.content![index].lastName}")),
+                          Expanded(
+                              child: Text(allClientModel!
+                                  .body!.content![index].email!)),
                         ],
                       ),
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       onLongPress: () {
                         userProvider.deleteUser(
-                            id:allClientModel!.body!.content![index].id!,
-                            email:allClientModel!.body!.content![index].email!,
+                            id: allClientModel!.body!.content![index].id!,
+                            email: allClientModel!.body!.content![index].email!,
                             context);
                       },
                     );
@@ -111,7 +115,5 @@ class UserListPage extends StatelessWidget {
         ],
       ),
     );
-  
-
   }
 }

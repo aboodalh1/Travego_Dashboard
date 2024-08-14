@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/widgets/flight_card.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/flight_card.dart';
 
 class FlightInfo extends StatelessWidget {
   const FlightInfo({super.key});

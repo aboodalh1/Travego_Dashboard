@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/addplace.dart';
-import 'package:travego_dashboard/desktop/placemodel.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/addplace.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/placemodel.dart';
 
 import 'place_details.dart';
-
 
 class place_page extends StatefulWidget {
   const place_page({super.key});

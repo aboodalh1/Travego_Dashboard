@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:travego_dashboard/Dio/dioHelper.dart';
-import 'package:travego_dashboard/desktop/Home_screen.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/Home_screen.dart';
 import 'package:travego_dashboard/models/user_model.dart';
 import 'package:travego_dashboard/shared/component/component.dart';
 import 'package:travego_dashboard/shared/constant/constant.dart';
 
-import '../models/get_all_client/all_client_model.dart';
+import '../../../../models/get_all_client/all_client_model.dart';
 
 class Desktoplogin extends StatefulWidget {
   Desktoplogin({super.key});
@@ -287,7 +287,9 @@ class _DesktoploginState extends State<Desktoplogin> {
                                   width: MediaQuery.of(context).size.width *
                                       0.0001,
                                 ),
-                                LoginButton(emailController: emailController, passwordController: passwordController),
+                                LoginButton(
+                                    emailController: emailController,
+                                    passwordController: passwordController),
                               ],
                             ),
                           ),
@@ -307,7 +309,6 @@ class _DesktoploginState extends State<Desktoplogin> {
       ),
     );
   }
-
 }
 
 class LoginButton extends StatelessWidget {
@@ -324,33 +325,33 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: () async {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading...')));
-          DioHelper.postData(
-              url: 'Auth/Manager/Manager_Login',
-              data: {
-                "email": emailController.text,
-                "password": passwordController.text
-              }).then((value) {
-                userModel = UserModel.fromJson(value.data);
-                token = userModel!.body!.token;
-                DioHelper.getData(path: 'Auth/Manager/Get_AllClient',token: token).then((value) {
-                  allClientModel = AllClientModel.fromJson(value.data);
-                  showToast(text: value.data['message'], state: ToastStates.SUCCESS);
-                });
-              navigateAndFinish(
-                  context, const HomePageScreen());
-              showToast(text: userModel!.message!, state: ToastStates.SUCCESS);
-          }).catchError((e){
-        showToast(text: e.response?.data['message'], state: ToastStates.ERROR);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Loading...')));
+          DioHelper.postData(url: 'Auth/Manager/Manager_Login', data: {
+            "email": emailController.text,
+            "password": passwordController.text
+          }).then((value) {
+            userModel = UserModel.fromJson(value.data);
+            token = userModel!.body!.token;
+
+            DioHelper.getData(path: 'Auth/Manager/Get_AllClient', token: token)
+                .then((value) {
+              allClientModel = AllClientModel.fromJson(value.data);
+              showToast(
+                  text: value.data['message'], state: ToastStates.SUCCESS);
             });
+            navigateAndFinish(context, const HomePageScreen());
+            showToast(text: userModel!.message!, state: ToastStates.SUCCESS);
+          }).catchError((e) {
+            showToast(
+                text: e.response?.data['message'], state: ToastStates.ERROR);
+          });
         },
         style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.fromLTRB(
-                40, 16, 40, 16),
+            padding: const EdgeInsets.fromLTRB(40, 16, 40, 16),
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(30))),
+                borderRadius: BorderRadius.circular(30))),
         child: const Center(
           child: Text(
             ' Login ',

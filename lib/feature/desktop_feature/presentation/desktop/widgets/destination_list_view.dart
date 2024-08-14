@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/widgets/destination_card.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/destination_card.dart';
 
 class DestinationCards extends StatelessWidget {
   final List<DestinationCard> listplaces;

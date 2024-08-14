@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:travego_dashboard/core/domain/services/api_imp.dart';
-import 'package:travego_dashboard/desktop/users/Users.dart';
-import 'package:travego_dashboard/desktop/countries.dart';
-import 'package:travego_dashboard/desktop/create_trip.dart';
-import 'package:travego_dashboard/desktop/hotellist.dart';
-import 'package:travego_dashboard/desktop/provider.dart';
-import 'package:travego_dashboard/desktop/widgets/booking_history.dart';
-import 'package:travego_dashboard/desktop/widgets/destination_card.dart';
-import 'package:travego_dashboard/desktop/widgets/destination_list_view.dart';
-import 'package:travego_dashboard/desktop/widgets/flight_info.dart';
-import 'package:travego_dashboard/desktop/widgets/header.dart';
-import 'package:travego_dashboard/desktop/widgets/hotels_card_list_view.dart';
-import 'package:travego_dashboard/desktop/widgets/upcoming_trips.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/users/Users.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/countries.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/create_trip.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/hotellist.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/provider.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/booking_history.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/destination_card.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/destination_list_view.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/flight_info.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/header.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/hotels_card_list_view.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/widgets/upcoming_trips.dart';
 import 'package:travego_dashboard/feature/trip/data/repo/trip_repo_impl.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/city_model/city_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/manager/country_cubit/country_cubit.dart';
@@ -22,7 +22,7 @@ import 'package:travego_dashboard/feature/trip/presentation/manager/create_trip_
 import 'package:travego_dashboard/feature/trip/presentation/manager/hotel_cubit/hotel_cubit.dart';
 import 'package:travego_dashboard/feature/trip/presentation/views/add_trip_view.dart';
 
-import '../feature/trip/presentation/manager/services_cubit/hotel_cubit.dart';
+import '../../../trip/presentation/manager/services_cubit/hotel_cubit.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
@@ -106,7 +106,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       margin: const EdgeInsets.only(left: 15),
                       width: cont.maxWidth * 0.97,
                       height: MediaQuery.of(context).size.height,
-                      color: Colors.amber,
+                      // color: Colors.amber,
                       child: body[index],
                     ),
                   ),
@@ -164,7 +164,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 4),
-                                    const HotelCards(),
+                                    // const HotelCards(),
                                     const FlightInfo(),
                                     const UpcomingTrips(),
                                   ],
@@ -219,6 +219,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   onTap: () async {
                     setState(() {
                       index = 0;
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.apartment),
+                  title: const Text('hotels'),
+                  onTap: () async {
+                    setState(() {
+                      index = 2;
                     });
                   },
                 ),

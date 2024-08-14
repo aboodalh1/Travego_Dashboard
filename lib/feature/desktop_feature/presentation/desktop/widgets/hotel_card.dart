@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travego_dashboard/desktop/hotel_deatails.dart';
+import 'package:travego_dashboard/feature/desktop_feature/presentation/desktop/hotel_deatails.dart';
 
 class HotelCard extends StatelessWidget {
   final String imagePath;
